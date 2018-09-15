@@ -11,7 +11,7 @@
     - zlib1g-dev
     - libpng-dev
 
-- name: Create a dir for the zint source code
+- name: Create a dir for the Zint source code
   file:
     state: directory
     path: "/usr/local/src/zint"
@@ -23,21 +23,29 @@
     dest: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
     checksum: "{{ zint_source_checksum }}"
 
-- name: Extract zint source code
+- name: Extract Zint source code
   unarchive:
     remote_src: true
     src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
     dest: "/usr/local/src/zint/"
+    creates: "/usr/local/src/zint/zint-{{ zint_version }}/"
+    owner: root
+    group: root
 
-- name: Create the makefile for Zint with cmake
-  raw: >
-    cd /usr/local/src/zint/zint-{{ zint_version }} && cmake .
+- name: Create Zint's makefile
+  shell: /usr/bin/cmake .
+  args:
+    chdir: /usr/local/src/zint/zint-{{ zint_version }}
+    creates: /usr/local/src/zint/zint-{{ zint_version }}/CMakeFiles/Makefile.cmake
+  register: cmake_result
 
-- name: Build zint
+- name: Build Zint
   make:
     chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
+  when: cmake_result.changed
 
-- name: Install zint
+- name: Install Zint
   make:
     chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
     target: install
+  when: cmake_result.changed
