@@ -1,0 +1,43 @@
+---
+- name: Install Zint pre-requisites
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - 'g++'
+    - cmake
+    - libqt4-dev
+    - zlib1g-dev
+    - libpng-dev
+
+- name: Create a dir for the zint source code
+  file:
+    state: directory
+    path: "/usr/local/src/zint"
+    recurse: true
+
+- name: Download Zint source code
+  get_url:
+    url: "{{ zint_source }}"
+    dest: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
+    checksum: "{{ zint_source_checksum }}"
+
+- name: Extract zint source code
+  unarchive:
+    remote_src: true
+    src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
+    dest: "/usr/local/src/zint/"
+
+- name: Create the makefile for Zint with cmake
+  raw: >
+    cd /usr/local/src/zint/zint-{{ zint_version }} && cmake .
+
+- name: Build zint
+  make:
+    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
+
+- name: Install zint
+  make:
+    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
+    target: install
