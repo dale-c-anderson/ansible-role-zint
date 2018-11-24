@@ -25,7 +25,7 @@ None
           zint_source: "https://github.com/downloads/zint/zint/zint-{{ zint_version }}.tar.gz"
           zint_source_checksum: 'sha256:76547faaba0bfbea43733ab324e498863ebf21fc9a2e5db93512739d661a2b3a'
       tags:
-        - php
+        - zint
 
 ## License
 
