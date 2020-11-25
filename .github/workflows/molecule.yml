@@ -27,7 +27,6 @@ jobs:
     strategy:
       matrix:
         image:
-          - geerlingguy/docker-ubuntu2004-ansible:latest
           - geerlingguy/docker-ubuntu1804-ansible:latest
           - geerlingguy/docker-ubuntu1604-ansible:latest
     steps:
