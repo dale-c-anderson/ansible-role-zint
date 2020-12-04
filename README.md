@@ -1,5 +1,7 @@
 # Ansible role: Zint
 
+![.github/workflows/molecule.yml](https://github.com/AcroMedia/ansible-role-zint/workflows/.github/workflows/molecule.yml/badge.svg)
+
 - Install Zint's build prerequisites
 - Build and Install Zint from source on Ubuntu
 

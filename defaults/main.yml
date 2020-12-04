@@ -1,4 +1,4 @@
 ---
-zint_version: 2.4.2
+zint_version: 2.4.3
 zint_source: "https://github.com/downloads/zint/zint/zint-{{ zint_version }}.tar.gz"
-zint_source_checksum: 'sha256:76547faaba0bfbea43733ab324e498863ebf21fc9a2e5db93512739d661a2b3a'
+zint_source_checksum: 'sha256:de2f4fd0d008530511f5dea2cff7f96f45df4c029b57431b2411b7e1f3a523e8'
