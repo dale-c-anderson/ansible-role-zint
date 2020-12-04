@@ -4,6 +4,12 @@
   become: no
   gather_facts: yes
   tasks:
-
-
-
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=600
+      changed_when: false
+      when: ansible_facts['os_family'] == 'Debian'
+    - name: make | install make
+      become: true
+      apt:
+        pkg: make
+        state: present
