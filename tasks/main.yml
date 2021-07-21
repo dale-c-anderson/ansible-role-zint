@@ -7,7 +7,6 @@
   with_items:
     - 'g++'
     - cmake
-    - libqt4-dev
     - zlib1g-dev
     - libpng-dev
 
@@ -49,3 +48,14 @@
     chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
     target: install
   when: cmake_result.changed
+
+- name: Uninstall Zint pre-requisites
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - 'g++'
+    - cmake
+    - libqt4-dev
+    - zlib1g-dev
+    - libpng-dev
