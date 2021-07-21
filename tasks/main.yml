@@ -1,14 +1,13 @@
 ---
 - name: Install Zint pre-requisites
   apt:
-    name: "{{ item }}"
+    name:
+      - 'g++'
+      - cmake
+      - zlib1g-dev
+      - libpng-dev
     state: present
     update_cache: yes
-  with_items:
-    - 'g++'
-    - cmake
-    - zlib1g-dev
-    - libpng-dev
 
 - name: Create a dir for the Zint source code
   file:
@@ -51,10 +50,9 @@
 
 - name: Uninstall Zint pre-requisites
   apt:
-    name: "{{ item }}"
+    name:
+      - 'g++'
+      - cmake
+      - zlib1g-dev
+      - libpng-dev
     state: absent
-  with_items:
-    - 'g++'
-    - cmake
-    - zlib1g-dev
-    - libpng-dev
