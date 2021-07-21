@@ -56,6 +56,5 @@
   with_items:
     - 'g++'
     - cmake
-    - libqt4-dev
     - zlib1g-dev
     - libpng-dev
