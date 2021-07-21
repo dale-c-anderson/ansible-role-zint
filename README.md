@@ -5,6 +5,11 @@
 - Install Zint's build prerequisites
 - Build and Install Zint from source on Ubuntu
 
+## Updating Zint
+
+The role does not support updating Zint. To change the installed version of
+Zint, first delete `/usr/local/bin/zint`, then install the new version.
+
 ## Requirements
 
 * Ubuntu LTS (20.04 or newer)
