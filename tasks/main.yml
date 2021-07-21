@@ -1,51 +1,76 @@
 ---
-- name: Install Zint pre-requisites
-  apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - 'g++'
-    - cmake
-    - libqt4-dev
-    - zlib1g-dev
-    - libpng-dev
+- name: Check whether Zint is installed
+  stat:
+    path: "/usr/local/bin/zint"
+  register: zint_stat
 
-- name: Create a dir for the Zint source code
-  file:
-    state: directory
-    path: "/usr/local/src/zint"
-    recurse: true
+- name: Print a debug message if Zint is uninstalled
+  debug:
+    msg: "Zint doesn't exist"
+  when: zint_stat.stat.isreg is not defined
 
-- name: Download Zint source code
-  get_url:
-    url: "{{ zint_source }}"
-    dest: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
-    checksum: "{{ zint_source_checksum }}"
-
-- name: Extract Zint source code
-  unarchive:
-    remote_src: true
-    src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
-    dest: "/usr/local/src/zint/"
-    creates: "/usr/local/src/zint/zint-{{ zint_version }}/"
-    owner: root
-    group: root
-
-- name: Create Zint's makefile
-  shell: /usr/bin/cmake .
-  args:
-    chdir: /usr/local/src/zint/zint-{{ zint_version }}
-    creates: /usr/local/src/zint/zint-{{ zint_version }}/CMakeFiles/Makefile.cmake
-  register: cmake_result
-
-- name: Build Zint
-  make:
-    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
-  when: cmake_result.changed
+- name: Print a debug message if Zint is installed
+  debug:
+    msg: "Zint exists"
+  when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
 
 - name: Install Zint
-  make:
-    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
-    target: install
-  when: cmake_result.changed
+  when: zint_stat.stat.isreg is not defined
+  block:
+    - name: Install Zint pre-requisites
+      apt:
+        name:
+          - 'g++'
+          - cmake
+          - zlib1g-dev
+          - libpng-dev
+        state: present
+        update_cache: yes
+
+    - name: Create a dir for the Zint source code
+      file:
+        state: directory
+        path: "/usr/local/src/zint"
+        recurse: true
+
+    - name: Download Zint source code
+      get_url:
+        url: "{{ zint_source }}"
+        dest: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
+        checksum: "{{ zint_source_checksum }}"
+
+    - name: Extract Zint source code
+      unarchive:
+        remote_src: true
+        src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
+        dest: "/usr/local/src/zint/"
+        creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+        owner: root
+        group: root
+
+    - name: Create Zint's makefile
+      shell: /usr/bin/cmake .
+      args:
+        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src"
+        creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/CMakeFiles/Makefile.cmake"
+      register: cmake_result
+
+    - name: Build Zint
+      make:
+        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+      when: cmake_result.changed
+
+    - name: Install Zint
+      make:
+        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+        target: install
+      when: cmake_result.changed
+
+    - name: Uninstall Zint pre-requisites
+      apt:
+        name:
+          - 'g++'
+          - cmake
+          - zlib1g-dev
+          - libpng-dev
+        state: absent

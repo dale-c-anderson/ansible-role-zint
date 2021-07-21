@@ -5,9 +5,14 @@
 - Install Zint's build prerequisites
 - Build and Install Zint from source on Ubuntu
 
+## Updating Zint
+
+The role does not support updating Zint. To change the installed version of
+Zint, first delete `/usr/local/bin/zint`, then install the new version.
+
 ## Requirements
 
-* Ubuntu LTS (14.04 or newer)
+* Ubuntu LTS (20.04 or newer)
 
 ## Role Variables
 
@@ -23,9 +28,9 @@ None
     - roles:
         - name: Install Zint from source
           role: acromedia.zint
-          zint_version: 2.4.2
-          zint_source: "https://github.com/downloads/zint/zint/zint-{{ zint_version }}.tar.gz"
-          zint_source_checksum: 'sha256:76547faaba0bfbea43733ab324e498863ebf21fc9a2e5db93512739d661a2b3a'
+          zint_version: 2.9.1
+          zint_source: "https://sourceforge.net/projects/zint/files/zint/{{ zint_version }}/zint-{{ zint_version }}-src.tar.gz/download"
+          zint_source_checksum: 'sha256:bd286d863bc60d65a805ec3e46329c5273a13719724803b0ac02e5b5804c596a'
       tags:
         - zint
 
