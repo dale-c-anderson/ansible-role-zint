@@ -27,7 +27,7 @@
     remote_src: true
     src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
     dest: "/usr/local/src/zint/"
-    creates: "/usr/local/src/zint/zint-{{ zint_version }}/"
+    creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
     owner: root
     group: root
 
@@ -40,12 +40,12 @@
 
 - name: Build Zint
   make:
-    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
+    chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
   when: cmake_result.changed
 
 - name: Install Zint
   make:
-    chdir: "/usr/local/src/zint/zint-{{ zint_version }}/"
+    chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
     target: install
   when: cmake_result.changed
 
