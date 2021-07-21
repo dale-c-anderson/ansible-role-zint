@@ -14,13 +14,8 @@
     msg: "Zint exists"
   when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
 
-- name: Check the current version of Zint
-  shell: 'zint --help | grep "Zint version {{ zint_version }}"'
-  when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
-  register: zint_version_check
-
 - name: Install Zint
-  when: zint_stat.stat.isreg is not defined or zint_version_check.rc != '0'
+  when: zint_stat.stat.isreg is not defined
   block:
     - name: Install Zint pre-requisites
       apt:
