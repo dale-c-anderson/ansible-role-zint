@@ -15,8 +15,7 @@
   when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
 
 - name: Check the current version of Zint
-  shell: |
-    grep "Zint version {{ zint_version }}" <(zint --help)
+  shell: 'zint --help | grep "Zint version {{ zint_version }}"'
   when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
   register: zint_version_check
 
