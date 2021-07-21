@@ -34,8 +34,8 @@
 - name: Create Zint's makefile
   shell: /usr/bin/cmake .
   args:
-    chdir: /usr/local/src/zint/zint-{{ zint_version }}
-    creates: /usr/local/src/zint/zint-{{ zint_version }}/CMakeFiles/Makefile.cmake
+    chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src"
+    creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/CMakeFiles/Makefile.cmake"
   register: cmake_result
 
 - name: Build Zint
