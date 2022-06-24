@@ -15,3 +15,8 @@ provisioner:
   name: ansible
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+verifier:
+  name: ansible
+env:
+  PY_COLORS: '1'
+  ANSIBLE_FORCE_COLOR: '1'
