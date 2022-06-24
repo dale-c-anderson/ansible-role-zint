@@ -1,7 +1,14 @@
 ---
-- name: Check whether Zint is installed
+- set_fact:
+    zint_local_source_base: /usr/local/src/zint
+
+- set_fact:
+    zint_local_source_gz: "{{ zint_local_source_base }}/zint-{{ zint_version }}.tar.gz"
+    zint_local_source_dir: "{{ zint_local_source_base }}/zint-{{ zint_version }}-src"
+
+- name: Check whether Zint {{ zint_version }} has been downloaded
   stat:
-    path: "/usr/local/bin/zint"
+    path: "{{ zint_local_source_gz }}"
   register: zint_stat
 
 - name: Print a debug message if Zint is uninstalled
