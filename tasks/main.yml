@@ -11,17 +11,17 @@
     path: "{{ zint_local_source_gz }}"
   register: zint_stat
 
-- name: Print a debug message if Zint is uninstalled
+- name: Print a debug message if Zint {{ zint_version }} has not been downloaded
   debug:
     msg: "Zint doesn't exist"
   when: zint_stat.stat.isreg is not defined
 
-- name: Print a debug message if Zint is installed
+- name: Print a debug message if Zint {{ zint_version }} has been downloaded
   debug:
     msg: "Zint exists"
   when: zint_stat.stat.isreg is defined and zint_stat.stat.isreg
 
-- name: Install Zint
+- name: Install Zint {{ zint_version }}
   when: zint_stat.stat.isreg is not defined
   block:
     - name: Install Zint pre-requisites
@@ -37,39 +37,39 @@
     - name: Create a dir for the Zint source code
       file:
         state: directory
-        path: "/usr/local/src/zint"
+        path: "{{ zint_local_source_base }}"
         recurse: true
 
-    - name: Download Zint source code
+    - name: Download Zint {{ zint_version }} source code
       get_url:
         url: "{{ zint_source }}"
-        dest: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
+        dest: "{{ zint_local_source_gz }}"
         checksum: "{{ zint_source_checksum }}"
 
-    - name: Extract Zint source code
+    - name: Extract Zint {{ zint_version }} source code
       unarchive:
         remote_src: true
-        src: "/usr/local/src/zint/zint-{{ zint_version }}.tar.gz"
-        dest: "/usr/local/src/zint/"
-        creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+        src: "{{ zint_local_source_gz }}"
+        dest: "{{ zint_local_source_base }}/"
+        creates: "{{ zint_local_source_dir }}/"
         owner: root
         group: root
 
-    - name: Create Zint's makefile
+    - name: Create Zint {{ zint_version }}'s makefile
       shell: /usr/bin/cmake .
       args:
-        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src"
-        creates: "/usr/local/src/zint/zint-{{ zint_version }}-src/CMakeFiles/Makefile.cmake"
+        chdir: "{{ zint_local_source_dir }}"
+        creates: "{{ zint_local_source_dir }}/CMakeFiles/Makefile.cmake"
       register: cmake_result
 
-    - name: Build Zint
+    - name: Build Zint {{ zint_version }}
       make:
-        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+        chdir: "{{ zint_local_source_dir }}/"
       when: cmake_result.changed
 
-    - name: Install Zint
+    - name: Install Zint {{ zint_version }}
       make:
-        chdir: "/usr/local/src/zint/zint-{{ zint_version }}-src/"
+        chdir: "{{ zint_local_source_dir }}/"
         target: install
       when: cmake_result.changed
 
