@@ -9,5 +9,7 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - focal
+  namespace: acromedia
+  role_name: zint
   galaxy_tags: []
 dependencies: []
