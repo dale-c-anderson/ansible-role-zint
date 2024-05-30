@@ -2,6 +2,25 @@
 - set_fact:
     zint_local_source_base: /usr/local/src/zint
 
+- name: Set zint version if not defined by sending a request to SourceForge
+  # https://sourceforge.net/projects/zint/best_release.json
+  uri:
+    url: "https://sourceforge.net/projects/zint/best_release.json"
+    return_content: yes
+  register: zint_version_result
+  when: zint_version is not defined
+
+- set_fact:
+    # version can be grabbed from release.filename, which looks like /zint/<version>/zint-<version>-src.tar.gz
+    zint_version: "{{ zint_version_result.json.release.filename.split('/')[2] }}"
+    zint_source_checksum: "md5:{{ zint_version_result.json.release.md5sum }}"
+  when: zint_version is not defined
+
+- name: Set source URL if not defined
+  set_fact:
+    zint_source: "https://sourceforge.net/projects/zint/files/zint/{{ zint_version }}/zint-{{ zint_version }}-src.tar.gz/download"
+  when: zint_source is not defined
+
 - set_fact:
     zint_local_source_gz: "{{ zint_local_source_base }}/zint-{{ zint_version }}.tar.gz"
     zint_local_source_dir: "{{ zint_local_source_base }}/zint-{{ zint_version }}-src"

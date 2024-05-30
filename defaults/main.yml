@@ -1,4 +1,0 @@
----
-zint_version: '2.11.0'
-zint_source: "https://sourceforge.net/projects/zint/files/zint/{{ zint_version }}/zint-{{ zint_version }}-src.tar.gz/download"
-zint_source_checksum: 'sha1:afca4c33ce82ec6027430a30bb58661157c0b38d'
