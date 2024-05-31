@@ -8,7 +8,6 @@
     - name: Verify utilities are available
       command: >
         {{ item }}
-        with_items:
       with_items:
         - zint --help
 
