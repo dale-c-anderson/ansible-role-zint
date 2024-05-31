@@ -18,7 +18,7 @@ Zint, first delete `/usr/local/bin/zint`, then install the new version.
 
 If these variables are not supplied, the role will just pull the latest version.
 
-```
+```yaml
 zint_version: 2.13.0
 zint_source: "https://sourceforge.net/projects/zint/files/zint/{{ zint_version }}/zint-{{ zint_version }}-src.tar.gz/download"
 zint_source_checksum: 'sha256:a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8'
